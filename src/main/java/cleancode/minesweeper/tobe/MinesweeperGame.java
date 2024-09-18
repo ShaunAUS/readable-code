@@ -25,6 +25,8 @@ public class MinesweeperGame {
 
         while (true) {
             showBoard();
+
+
             if (doesUserWinTheGame()) {
                 System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
                 break;
@@ -33,8 +35,8 @@ public class MinesweeperGame {
                 System.out.println("지뢰를 밟았습니다. GAME OVER!");
                 break;
             }
-            System.out.println();
 
+            System.out.println();
             String cellInput = getCellInputFromUser();
             String userActionInput = getUserActionInputFromUser();
             actOnCell(cellInput, userActionInput);
@@ -44,6 +46,7 @@ public class MinesweeperGame {
     private static void actOnCell(String cellInput, String userActionInput) {
         int selectedColIndex = getSelectedColIndex(cellInput);
         int selectedRowIndex = getSelectedRowIndex(cellInput);
+
         if (doesUserChooseToPlantFlag(userActionInput)) {
             BOARD[selectedRowIndex][selectedColIndex] = FLAG_SIGN;
             checkIfGameIsOver();
@@ -175,11 +178,13 @@ public class MinesweeperGame {
                 BOARD[row][col] = "□";
             }
         }
+
         for (int i = 0; i < LAND_MINE_COUNT; i++) {
             int col = new Random().nextInt(10);
             int row = new Random().nextInt(8);
             LAND_MINES[row][col] = true;
         }
+
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 10; col++) {
                 int count = 0;
