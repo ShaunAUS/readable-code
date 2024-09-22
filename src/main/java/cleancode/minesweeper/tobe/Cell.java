@@ -1,52 +1,77 @@
 package cleancode.minesweeper.tobe;
 
 public class Cell {
-    private final String sign;
     private static final String FLAG_SIGN = "⚑";
     private static final String LAND_MINE_SING = "☼";
-    private static final String OPENED_CELL_SIGN = "■";
-    private static final String CLOSE_CELL_SING = "□";
+    private static final String UNCHECKED_SIGN = "□";
+    private static final String EMPTY_SIGN = "■";
 
 
-    private Cell(String sign) {
-        this.sign = sign;
+    private int nearbyLandMineCount;
+    private boolean isLandMine;
+    private boolean isFlagged;
+    private boolean isOpened;
+
+    public Cell( int nearbyLandMineCount, boolean isLandMine, boolean isFlagged, boolean isOpened) {
+        this.nearbyLandMineCount = nearbyLandMineCount;
+        this.isLandMine = isLandMine;
+        this.isFlagged = isFlagged;
+        this.isOpened = isOpened;
     }
 
-    public static Cell of(String sign) {
-        return new Cell(sign);
-    }
-
-    public static Cell ofFlag() {
-        return of(FLAG_SIGN);
-    }
-
-    public static Cell ofLandMine() {
-        return of(LAND_MINE_SING);
-    }
-
-    public static Cell ofClosed() {
-        return of(CLOSE_CELL_SING);
-    }
-
-    public static Cell ofOpened() {
-        return of(OPENED_CELL_SIGN);
-    }
-
-    public static Cell ofNearbyLandMineCount(int count) {
-        return of(String.valueOf(count));
+    public static Cell of( int nearbyLandMineCount, boolean isLandMine, boolean isFlagged, boolean isOpened) {
+        return new Cell( nearbyLandMineCount, isLandMine, isFlagged, isOpened);
     }
 
 
+    public static Cell create() {
+        return of( 0, false, false, false);
+    }
+
+
+    //Early return
     public String getSign() {
-        return sign;
+        if (isOpened) {
+            if (isLandMine) {
+                return LAND_MINE_SING;
+            }
+            if (hasLandMineCount()) {
+                return String.valueOf(nearbyLandMineCount);
+            }
+            return EMPTY_SIGN;
+        }
+        return UNCHECKED_SIGN;
     }
 
-
-    public boolean isClosed() {
-        return CLOSE_CELL_SING.equals(this.sign);
+    public void turnOnLandMine() {
+        this.isLandMine = true;
     }
 
-    public boolean doesNotClosed() {
-        return !isClosed();
+    public void updateNearybyLandMineCount(int count) {
+        this.nearbyLandMineCount = count;
+    }
+
+    public void flag() {
+        this.isFlagged = true;
+    }
+
+    public boolean isChecked() {
+        return isFlagged || isOpened;
+    }
+
+    public boolean isLandMine() {
+        return isLandMine;
+    }
+
+    public void open() {
+        this.isOpened = true;
+    }
+
+    public boolean isOpened() {
+        return isOpened;
+    }
+
+    public boolean hasLandMineCount() {
+        return this.nearbyLandMineCount != 0;
     }
 }
